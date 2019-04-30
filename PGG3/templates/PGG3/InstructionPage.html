@@ -1,0 +1,19 @@
+{% extends "global/Page.html" %}
+{% load staticfiles otree %}
+
+{% block title %}
+    Instructions
+{% endblock %}
+
+{% block content %}
+    <h5>You are playing as Player {{ player.id_in_group }}</h5>
+
+    {% if player.role == 'Manager' %}
+        {% include Constants.instructions_template_for_manager %}
+    {% else %}
+        {% include Constants.instructions_template_for_members %}
+    {% endif %}
+
+    {% next_button %}
+
+{% endblock %}

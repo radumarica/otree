@@ -1,0 +1,35 @@
+{% extends "global/Page.html" %}
+{% load staticfiles otree %}
+
+
+{% block styles %}
+
+    <link href="{% static "PGG0/styles.css" %}" rel="stylesheet">
+
+{% endblock %}
+
+
+{% block content %}
+
+    <nav class="navbar fixed-top navbar-dark" style="background-color: #3500D3">
+        <a class="navbar-brand" href="#"><img src="{% static "PGG0/pgg_logo.png" %}" height="30px"
+                                              style="padding-right: 10px">Instructions</a>
+        <ul class="nav navbar-nav navbar-right" style="flex-direction: row">
+            <li class="navbar-text" style="padding-right: 10px">
+            </li>
+            <li style="padding-right: 10px">{{ form.contribution }}</li>
+            <li>
+                <button class="btn btn-primary otree-btn-next btn-outline-light" type="submit">Start</button>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="instructions well well-lg">
+
+        <p>
+            Please read the instructions provided by the instructor.
+        </p>
+
+    </div>
+
+{% endblock %}

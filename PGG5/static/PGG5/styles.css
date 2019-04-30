@@ -1,0 +1,21 @@
+.page-header {
+    margin: 100px;
+    padding: 0px;
+}
+
+.otree-body {
+    padding-right: 50px;
+    padding-left: 50px;
+    max-width: 100%;
+}
+
+.contrainer {
+    padding-right: 50px;
+    padding-left: 50px;
+    max-width: 100%;
+}
+
+.navbar {
+    padding-right: 50px;
+    padding-left: 50px;
+}

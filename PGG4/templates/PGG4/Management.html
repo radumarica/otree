@@ -1,0 +1,152 @@
+{% extends "global/Page.html" %}
+{% load staticfiles otree %}
+
+{% block app_styles %}
+
+    <link href="{% static "PGG4/styles.css" %}" rel="stylesheet">
+
+{% endblock %}
+
+{% block content %}
+<h3>
+    (<b>Manager</b>) - This is round {{ round_num }}
+</h3>
+
+{% include Constants.overview_template %}
+
+<div class="inputWrapper">
+    <div class="wrapper">
+        <h5 class="alignCenter">Decision Window</h5>
+        <table class="table">
+            <tbody class="PRTable">
+                <tr>
+                    <th class="roundStyle"></th>
+                    <th>AC</th>
+                    <th>FDA</th>
+                    <th class="formfieldHeader">P/R</th>
+                </tr>
+
+                <tr>
+                    <th>Your Contribution</th>
+                    <td>{{ player.contribution }}</td>
+                    <td>{{ player.fairly_distributed_amount }}</td>
+                    <td class="formfieldHeader">
+                        <div class="required">
+                            <div class="controls field-payout_from_manager_{{ player.id_in_group }}">
+                                <div class="input-group input-group-narrow">
+                                    <input type="number" name="PR_amount_{{ player.id_in_group }}" value="None" step="1" min="-{{ player.fairly_distributed_amount }}" required id="id_PR_amount_{{ player.id_in_group }}" class="form-control"/>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
+                {% for o in player.get_others_in_group %}
+                    <tr>
+                        <th>Player {{ o.id_in_group }}</th>
+                        <td>
+                            {% if o.contribution != none %}
+                                {{ o.contribution }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if o.fairly_distributed_amount != none %}
+                                {{ o.fairly_distributed_amount }}
+                            {% endif %}
+                        </td>
+                        <td class="formfieldHeader">
+                            <div class="required">
+                                <div class="controls field-payout_from_manager_{{ o.id_in_group }}">
+                                    <div class="input-group input-group-narrow">
+                                        <input type="number" name="PR_amount_{{ o.id_in_group }}" value="None" step="1" min="-{{ o.fairly_distributed_amount }}" required id="id_PR_amount_{{ o.id_in_group }}" class="form-control"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+
+                <tr>
+                    <td colspan="3"></td>
+                    <td id="currentPR"></td>
+                </tr>
+
+            </tbody>
+        </table>
+
+        <button id="nextBtn" type="button" class="otree-btn-next btn btn-primary submitStyle">Next</button>
+        <div class="submitStyle buttonStyle" style="display: none">
+            <button id="backBtn" type="button" class="otree-btn-next btn btn-primary">Back</button>
+            <button id="confirmBtn" class="otree-btn-next btn btn-primary">Confirm</button>
+        </div>
+        <p id="wrntxt" style="text-align: center; display: none">Double check inputs</p>
+
+        <div class="informationNotes">
+            <p>AC = Actual Contribution</p>
+            <p>FDA = Fairly Distributed Amount</p>
+            <p>P/R = Punishment/Reward Amount</p>
+        </div>
+
+
+    </div> <!--formWrapper-->
+</div> <!--inputWrapper-->
+
+
+{% endblock %}
+
+{% block scripts %}
+
+    <script src="{% static "PGG4/view.js" %}"></script>
+
+    <script>
+        $('document').ready(function(){
+            $('#nextBtn').click(function () {
+                var values = 0;
+                $('input.form-control').each(function () {
+                    if ($.isNumeric(this.valueAsNumber)) {
+                        values += this.valueAsNumber
+                    }
+                });
+
+                if (values == 0) {
+                    $('#nextBtn').hide();
+                    $('.buttonStyle').show();
+                    $('input').prop('disabled', true);
+                }else{
+                    $('#wrntxt').show();
+                };
+            })
+
+            $('#backBtn').click(function () {
+                $('#nextBtn').show();
+                $('.buttonStyle').hide();
+                $('input').prop('disabled', false);
+            })
+
+            $('#confirmBtn').click(function () {
+                $('#nextBtn').show();
+                $('.buttonStyle').hide();
+                $('input').prop('disabled', false);
+            })
+
+            //displayValsSub();
+        });
+
+        function displayValsSub() {
+            var pool = 0;
+            var totalValue = pool;
+
+            $(".form-control").each(function (index) {
+                var currentValue = $( this ).val();
+                totalValue += Number(currentValue);
+            });
+
+            $("#currentPR").text(totalValue);
+        }
+
+
+        $( ".form-control" ).change( displayValsSub );
+    </script>
+
+
+{% endblock %}

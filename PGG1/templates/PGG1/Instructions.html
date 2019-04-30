@@ -1,0 +1,55 @@
+{% load otree staticfiles %}
+
+<div class="instructions well well-lg">
+
+    <p>
+        Thank you for participating in today’s experiment.
+        Please switch off your cell phone, do not talk to other participants, and do not communicate with others using the PC.
+    </p>
+
+    <p>
+        You have been randomly assigned to a group of <b>{{ Constants.players_per_group }} people</b> –
+        but will only conduct this experiment by yourself. You will not be made aware of the identity of
+        the others in your group (or any other group) at any time – neither will anyone else be made aware
+        of your identity. During the experiment you will also not be able to talk or chat to the others,
+        and none of the others will have such an opportunity.
+    </p>
+
+    <p>
+        Everyone in the group has been given <b> {{ Constants.endowment }}  </b> tokens as an endowment in the first round.
+        Everyone receives this endowment for each round of the experiment. In the experiment
+        you can freely decide how much of this amount to keep for yourself and how much to contribute
+        to the group account. Everyone in the group will make the same choice, and is allowed to contribute
+        any amount between 0 and 100 tokens. The sum of all contributions will be <b> doubled </b> by the experimenter
+        and the resulting total amount in the group account will then be equally divided among the four persons
+        in the group, i.e. everyone in the group receives 25% of the group account. The share that you receive
+        from the pool will then be added to the amount that you decided to keep for yourself. Note that due to
+        rounding errors the earning numbers may go few tokens up or down; also note that the pool is always
+        zero after everyone’s shares have been distributed.
+    </p>
+
+    <p>
+        You will engage in this experiment over <b>10 rounds</b>. In every round you and the other group
+        members will receive 100 token. All members of the group will make the same decision in every
+        round, i.e. you decide how much you will keep for yourself and how much you will contribute to
+        the pool. In each round the contributions will be doubled before the shares are paid out to the group member.
+    </p>
+
+    <p>
+        This is the end of the instructions. By pressing the ‘Next’ button we assume you have read
+        and understood the instructions of the Experiment. If you have any additional questions,
+        please ask the instructor before you proceed. Also, please do not close the browser at any
+        time. After you have completed the 10 rounds, please wait for the next instructions from the instructor.
+    </p>
+
+    <p>
+        Please, press ‘Next’ and continue with the Experiment. As you prepare to start with the
+        experiment, please be patient as others need to finish reading the instructions and start
+        as well. It may also take to compile data on the server.
+    </p>
+
+    <p>
+        If you have a question, please raise a hand – an instructor will come.
+    </p>
+
+</div>

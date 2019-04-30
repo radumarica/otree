@@ -1,0 +1,41 @@
+{% extends "global/Page.html" %}
+{% load staticfiles otree %}
+
+{% block app_styles %}
+
+    <link href="{% static "PGG3/styles.css" %}" rel="stylesheet">
+
+{% endblock %}
+
+{% block content %}
+<h3>
+    (<b>Summary overview</b>) - This is round {{ round_num }}
+</h3>
+
+{% include Constants.overview_template %}
+
+<div class="inputWrapper">
+    <div class="wrapper">
+        <div class="form-group required" style="margin-bottom: 0px">
+            <label class="col-form-label" for="id_contribution">How much will you contribute (from 0 to 100)?</label>
+
+            <div class="controls  field-contribution" style="overflow: auto">
+                <div class="submitCon">
+                    <input type="number" name="contribution" required step="1" min="0" max="100" id="id_contribution" class="form-control">
+                    <span class="input-group-addon"></span>
+                </div>
+                <div class="submitCon buttonStyle">
+                    <button class="otree-btn-next btn btn-primary btnStyle">Next</button>
+                </div>
+            </div><!--- .controls -->
+        </div><!--- .form-group -->
+    </div>
+    <div>
+        <p>Contr. = Contributed</p>
+        <p>Est. Ern. = Estimated Earnings</p>
+        <p>Real Ern. = Real Earnings</p>
+    </div>
+</div>
+
+
+{% endblock %}

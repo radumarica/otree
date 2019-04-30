@@ -1,0 +1,57 @@
+<style>
+
+    table, th, td {
+        border: 1px solid black;
+    }
+
+    #contribution-table {
+        font-size: x-small;
+        text-align: center;
+    }
+
+    #table-header td:nth-child({{ player.round_number|add:'1' }}) {
+        background: #350FFF;
+        color: white;
+    }
+
+    #contribution-table tr:nth-child(3) {
+        background: #350FFF77;
+        color: white;
+    }
+
+</style>
+
+
+<table id="contribution-table" style="table-layout: fixed; width: 100%">
+    <tr id="table-header">
+        <td>Round:</td>
+        {% for r in Constants.num_rounds_range %}
+            <td colspan="2">{{ r|add:'1' }}</td>
+        {% endfor %}
+    </tr>
+
+    <tr>
+        <td></td>
+        {% for r in Constants.num_rounds_range %}
+            <td>C</td>
+            <td>E</td>
+        {% endfor %}
+    </tr>
+
+    <tr>
+        <td><strong>You (Player {{ player.id_in_group }})</strong></td>
+        {% for p in player.in_previous_rounds %}
+            <td>{{ p.contribution }}</td>
+            <td>{{ p.payoff }}</td>
+        {% endfor %}
+    </tr>
+    {% for others in player.get_others_in_group %}
+        <tr>
+            <td>Player {{ others.id_in_group }}</td>
+            {% for p in others.in_previous_rounds %}
+                <td>{{ p.contribution }}</td>
+                <td>{{ p.payoff }}</td>
+            {% endfor %}
+        </tr>
+    {% endfor %}
+</table>

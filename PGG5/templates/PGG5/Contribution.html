@@ -1,0 +1,49 @@
+{% extends "global/Page.html" %}
+{% load staticfiles otree %}
+{% load static %}
+
+
+{% block app_styles %}
+
+    <link href="{% static "PGG5/styles.css" %}" rel="stylesheet">
+
+    <style>
+        .otree-btn-next {
+            margin: 0px;
+        }
+
+        .form-control {
+            border-color: white;
+        }
+
+        .form-control:focus {
+            border-color: #3500D3;
+        }
+    </style>
+
+{% endblock %}
+
+
+{% block content %}
+
+    <nav class="navbar fixed-top navbar-dark" style="background-color: #3500D3">
+        <a class="navbar-brand" href="#"><img src="{% static "PGG5/pgg_logo.png" %}" height="30px"
+                                              style="padding-right: 10px">Contribute</a>
+        <ul class="nav navbar-nav navbar-right" style="flex-direction: row">
+            <li class="navbar-text" style="padding-right: 10px">
+                <img src="{% static "PGG5/contribute_here.png" %}" height="20">
+            </li>
+            <input type="number" name="contribution" required step="1" min="0" max="100" id="id_contribution"
+                   class="form-control" style="width: 80px; height: 38px">
+            <li>
+                <button class="btn btn-primary otree-btn-next btn-outline-light" type="submit">Submit</button>
+            </li>
+        </ul>
+    </nav>
+
+    <h4 style="margin-top: 20px">Contributions <span style="font-size: small; color: blue; padding-left: 10px">C: contribution, E: earning</span></h4>
+    {% include "PGG5/ContributionTable.html" %}
+    <h4 style="margin-top: 20px">Punishments / Rewards</h4>
+    {% include "PGG5/ReinforcementTable.html" %}
+
+{% endblock %}

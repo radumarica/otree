@@ -1,0 +1,16 @@
+{% extends "global/Page.html" %}
+{% load staticfiles otree %}
+
+{% block title %}
+    {{experiment_name}} (Instructions)
+{% endblock %}
+
+
+{% block content %}
+    <h5>You are playing as Player {{ player.id_in_group }}</h5>
+
+    {% include Constants.instructions_template %}
+
+    {% next_button %}
+
+{% endblock %}

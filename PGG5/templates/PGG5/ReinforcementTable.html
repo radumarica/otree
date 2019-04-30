@@ -1,0 +1,59 @@
+<style>
+
+    #reinforcement-table th, #reinforcement-table td {
+        border: 1px solid black;
+    }
+
+    #reinforcement-table {
+        font-size: small;
+        text-align: center;
+    }
+
+    #table-header td:nth-child({{ player.round_number|add:'1' }}) {
+        background: #350FFF;
+        color: white;
+    }
+
+    #reinforcement-table tr:nth-child({{ player.id_in_group|add:'1' }}) {
+        background: #350FFF77;
+        color: white;
+    }
+
+</style>
+
+
+<table id="reinforcement-table" style="table-layout: fixed; width: 100%">
+    <tr id="table-header">
+        <td>Round:</td>
+        {% for r in Constants.num_rounds_range %}
+            <td>{{ r|add:'1' }}</td>
+        {% endfor %}
+    </tr>
+
+    {% for p in group.get_players %}
+        <tr>
+            <th>
+                Player
+                {{ p.id_in_group }}
+                {% if p.id_in_group == player.id_in_group %} (You) {% endif %}
+            </th>
+            {% for r in p.in_all_rounds_full_range %}
+                {% if p.round_number != r.round_number %}
+                    {% if p.id_in_group == 1 %}
+                        <td>{{ r.group.reinforcement_player_1 }}</td>
+                    {% endif %}
+                    {% if p.id_in_group == 2 %}
+                        <td>{{ r.group.reinforcement_player_2 }}</td>
+                    {% endif %}
+                    {% if p.id_in_group == 3 %}
+                        <td>{{ r.group.reinforcement_player_3 }}</td>
+                    {% endif %}
+                    {% if p.id_in_group == 4 %}
+                        <td>{{ r.group.reinforcement_player_4 }}</td>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        </tr>
+    {% endfor %}
+</table>
+

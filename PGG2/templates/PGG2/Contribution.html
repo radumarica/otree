@@ -1,0 +1,50 @@
+{% extends "global/Page.html" %}
+{% load staticfiles otree %}
+{% load static %}
+
+
+{% block app_styles %}
+
+    <link href="{% static "PGG2/styles.css" %}" rel="stylesheet">
+
+    <style>
+        .otree-btn-next {
+            margin: 0px;
+        }
+
+        .form-control {
+            border-color: white;
+        }
+
+        .form-control:focus {
+            border-color: #3500D3;
+        }
+    </style>
+
+{% endblock %}
+
+
+{% block content %}
+
+    {% if player.round_number > 1 %}
+        <h4 style="margin-top: 10px">Contributions</h4>
+        {% include "PGG2/ContributionTable.html" %}
+        <h4 style="margin-top: 10px">Punishments / Rewards</h4>
+        {% include "PGG2/ActionsTable.html" %}
+    {% endif %}
+
+    <nav class="navbar fixed-top navbar-dark" style="background-color: #3500D3">
+        <a class="navbar-brand" href="#"><img src="{% static "PGG2/pgg_logo.png" %}" height="30px"
+                                              style="padding-right: 10px">Contribute</a>
+        <ul class="nav navbar-nav navbar-right" style="flex-direction: row">
+            <li class="navbar-text" style="padding-right: 10px">
+                <img src="{% static "PGG2/contribute_here.png" %}" height="20">
+            </li>
+            <li style="padding-right: 10px">{{ form.contribution }}</li>
+            <li>
+                <button class="btn btn-primary otree-btn-next btn-outline-light" type="submit">Submit</button>
+            </li>
+        </ul>
+    </nav>
+
+{% endblock %}

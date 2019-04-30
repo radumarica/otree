@@ -1,0 +1,280 @@
+{% extends "global/Page.html" %}
+{% load staticfiles otree %}
+
+{% block app_styles %}
+
+    <link href="{% static "PGG1/styles.css" %}" rel="stylesheet">
+
+{% endblock %}
+
+{% block content %}
+
+<div class="informationBody">
+    <h4>
+        {{experiment_name}} (<b>Results</b>) - This is round {{ round_num }}
+    </h4>
+    <table class="table tableWrapper">
+        <tr>
+            <th class="roundStyle">Round</th>
+            {% for g in group.in_all_rounds %}
+                <td class="roundStyle">{{ g.round_number }}</td>
+            {% endfor %}
+            <td class="tableRegulator"></td>
+        </tr>
+
+        <tr>
+            <th>Your Contribution For Round</th>
+            {% for p in player.in_all_rounds %}
+                <td>{{ p.contribution }}</td>
+            {% endfor %}
+            <td class="tableRegulator"></td>
+        </tr>
+
+        {% for o in player.get_others_in_group %}
+            <tr>
+                <th>Player {{ o.id_in_group }}</th>
+                {% for p in o.in_all_rounds %}
+                    <td>
+                        {% if p.contribution %}
+                            {{ p.contribution }}
+                        {% endif %}
+                    </td>
+                {% endfor %}
+                <td class="tableRegulator"></td>
+            </tr>
+        {% endfor %}
+
+        <tr>
+            <th>Total Contribution</th>
+            {% for g in group.in_all_rounds %}
+                    <td>{{ g.total_contribution }}</td>
+            {% endfor %}
+            <td class="tableRegulator"></td>
+        </tr>
+    </table>
+
+{#    <h5>Earnings history including punishment and reward</h5>#}
+    <h5>Earnings history</h5>
+    <table class="table tableWrapper">
+        <tr>
+            <th>Your Earnings For Round</th>
+            {% for p in player.in_all_rounds %}
+                <td>{{ p.individual_share_after_PR }}</td>
+            {% endfor %}
+            <td class="tableRegulator"></td>
+        </tr>
+
+        {% for o in player.get_others_in_group %}
+            <tr>
+                <th>Player {{ o.id_in_group }}</th>
+                {% for p in o.in_all_rounds %}
+                    <td>
+                        {{ p.individual_share_after_PR }}
+                    </td>
+                {% endfor %}
+                <td class="tableRegulator"></td>
+            </tr>
+        {% endfor %}
+
+        <tr>
+            <th>Group Total Earnings</th>
+            {% for g in group.in_all_rounds %}
+                    <td>{{ g.total_payoff }}</td>
+            {% endfor %}
+            <td class="tableRegulator"></td>
+        </tr>
+
+        <tr>
+            <th>Your Total Earnings For Round</th>
+            {% for p in player.in_all_rounds %}
+                <td>{{ p.payoff }}</td>
+            {% endfor %}
+            <td class="tableRegulator"></td>
+        </tr>
+
+        {% for o in player.get_others_in_group %}
+            <tr>
+                <th>Player {{ o.id_in_group }}'s Total Earning For Round</th>
+                {% for p in o.in_all_rounds %}
+                    <td>
+                        {{ p.payoff }}
+                    </td>
+                {% endfor %}
+                <td class="tableRegulator"></td>
+            </tr>
+        {% endfor %}
+
+    </table>
+
+{#    <h5>Punishment/Reward from others to you</h5>#}
+{##}
+{#    <table class="table tableWrapper">#}
+{##}
+{#        <tr>#}
+{#            <th>You</th>#}
+{#            {% for p in player.in_all_rounds %}#}
+{#                <td>#}
+{#                    {% if player.id_in_group == 1 %}#}
+{#                        {% if p.punish_1 %}#}
+{#                            -{{ Constants.punishment_amount }}#}
+{#                        {% endif %}#}
+{#                        {% if p.reward_1 %}#}
+{#                            +{{ Constants.reward_amount }}#}
+{#                        {% endif %}#}
+{#                    {% elif player.id_in_group == 2 %}#}
+{#                        {% if p.punish_2 %}#}
+{#                            -{{ Constants.punishment_amount }}#}
+{#                        {% endif %}#}
+{#                        {% if p.reward_2 %}#}
+{#                            +{{ Constants.reward_amount }}#}
+{#                        {% endif %}#}
+{#                    {% elif player.id_in_group == 3 %}#}
+{#                        {% if p.punish_3 %}#}
+{#                            -{{ Constants.punishment_amount }}#}
+{#                        {% endif %}#}
+{#                        {% if p.reward_3 %}#}
+{#                            +{{ Constants.reward_amount }}#}
+{#                        {% endif %}#}
+{#                    {% elif player.id_in_group == 4 %}#}
+{#                        {% if p.punish_4 %}#}
+{#                            -{{ Constants.punishment_amount }}#}
+{#                        {% endif %}#}
+{#                        {% if p.reward_4 %}#}
+{#                            +{{ Constants.reward_amount }}#}
+{#                        {% endif %}#}
+{#                    {% endif %}#}
+{#                </td>#}
+{#            {% endfor %}#}
+{#            <td class="tableRegulator"></td>#}
+{#        </tr>#}
+{##}
+{#        {% for o in player.get_others_in_group %}#}
+{#            <tr>#}
+{#                <th>Player {{ o.id_in_group }}</th>#}
+{#                {% for p in o.in_all_rounds %}#}
+{#                    <td>#}
+{#                        {% if player.id_in_group == 1 %}#}
+{#                            {% if p.punish_1 %}#}
+{#                                -{{ Constants.punishment_amount }}#}
+{#                            {% endif %}#}
+{#                            {% if p.reward_1 %}#}
+{#                                +{{ Constants.reward_amount }}#}
+{#                            {% endif %}#}
+{#                        {% elif player.id_in_group == 2 %}#}
+{#                            {% if p.punish_2 %}#}
+{#                                -{{ Constants.punishment_amount }}#}
+{#                            {% endif %}#}
+{#                            {% if p.reward_2 %}#}
+{#                                +{{ Constants.reward_amount }}#}
+{#                            {% endif %}#}
+{#                        {% elif player.id_in_group == 3 %}#}
+{#                            {% if p.punish_3 %}#}
+{#                                -{{ Constants.punishment_amount }}#}
+{#                            {% endif %}#}
+{#                            {% if p.reward_3 %}#}
+{#                                +{{ Constants.reward_amount }}#}
+{#                            {% endif %}#}
+{#                        {% elif player.id_in_group == 4 %}#}
+{#                            {% if p.punish_4 %}#}
+{#                                -{{ Constants.punishment_amount }}#}
+{#                            {% endif %}#}
+{#                            {% if p.reward_4 %}#}
+{#                                +{{ Constants.reward_amount }}#}
+{#                            {% endif %}#}
+{#                        {% endif %}#}
+{#                    </td>#}
+{#                {% endfor %}#}
+{#                <td class="tableRegulator"></td>#}
+{#            </tr>#}
+{#        {% endfor %}#}
+{#    </table>#}
+{##}
+{#    <h5>You have Punished/Rewarded</h5>#}
+{##}
+{#    <table class="table tableWrapper">#}
+{##}
+{#        <tr>#}
+{#            <th>You</th>#}
+{#            {% for p in player.in_all_rounds %}#}
+{#                <td>#}
+{#                    {% if player.id_in_group == 1 %}#}
+{#                        {% if p.punish_1 %}#}
+{#                            -{{ Constants.punishment_amount }}#}
+{#                        {% endif %}#}
+{#                        {% if p.reward_1 %}#}
+{#                            +{{ Constants.reward_amount }}#}
+{#                        {% endif %}#}
+{#                    {% elif player.id_in_group == 2 %}#}
+{#                        {% if p.punish_2 %}#}
+{#                            -{{ Constants.punishment_amount }}#}
+{#                        {% endif %}#}
+{#                        {% if p.reward_2 %}#}
+{#                            +{{ Constants.reward_amount }}#}
+{#                        {% endif %}#}
+{#                    {% elif player.id_in_group == 3 %}#}
+{#                        {% if p.punish_3 %}#}
+{#                            -{{ Constants.punishment_amount }}#}
+{#                        {% endif %}#}
+{#                        {% if p.reward_3 %}#}
+{#                            +{{ Constants.reward_amount }}#}
+{#                        {% endif %}#}
+{#                    {% elif player.id_in_group == 4 %}#}
+{#                        {% if p.punish_4 %}#}
+{#                            -{{ Constants.punishment_amount }}#}
+{#                        {% endif %}#}
+{#                        {% if p.reward_4 %}#}
+{#                            +{{ Constants.reward_amount }}#}
+{#                        {% endif %}#}
+{#                    {% endif %}#}
+{#                </td>#}
+{#            {% endfor %}#}
+{#            <td class="tableRegulator"></td>#}
+{#        </tr>#}
+{##}
+{#        {% for o in player.get_others_in_group %}#}
+{#            <tr>#}
+{#                <th>Player {{ o.id_in_group }}</th>#}
+{#                {% for p in player.in_all_rounds %}#}
+{#                    <td>#}
+{#                        {% if o.id_in_group == 1 %}#}
+{#                            {% if p.punish_1 %}#}
+{#                                -{{ Constants.punishment_amount }}#}
+{#                            {% endif %}#}
+{#                            {% if p.reward_1 %}#}
+{#                                +{{ Constants.reward_amount }}#}
+{#                            {% endif %}#}
+{#                        {% elif o.id_in_group == 2 %}#}
+{#                            {% if p.punish_2 %}#}
+{#                                -{{ Constants.punishment_amount }}#}
+{#                            {% endif %}#}
+{#                            {% if p.reward_2 %}#}
+{#                                +{{ Constants.reward_amount }}#}
+{#                            {% endif %}#}
+{#                        {% elif o.id_in_group == 3 %}#}
+{#                            {% if p.punish_3 %}#}
+{#                                -{{ Constants.punishment_amount }}#}
+{#                            {% endif %}#}
+{#                            {% if p.reward_3 %}#}
+{#                                +{{ Constants.reward_amount }}#}
+{#                            {% endif %}#}
+{#                        {% elif o.id_in_group == 4 %}#}
+{#                            {% if p.punish_4 %}#}
+{#                                -{{ Constants.punishment_amount }}#}
+{#                            {% endif %}#}
+{#                            {% if p.reward_4 %}#}
+{#                                +{{ Constants.reward_amount }}#}
+{#                            {% endif %}#}
+{#                        {% endif %}#}
+{#                    </td>#}
+{#                {% endfor %}#}
+{#                <td class="tableRegulator"></td>#}
+{#            </tr>#}
+{#        {% endfor %}#}
+{#    </table>#}
+</div> <!--Information Body-->
+
+<div class="buttonPosition">
+  {% next_button %}
+</div>
+
+{% endblock %}

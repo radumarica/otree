@@ -1,0 +1,232 @@
+{% extends "global/Page.html" %}
+{% load staticfiles otree %}
+
+
+{% block styles %}
+
+    <link href="{% static "PGG2/styles.css" %}" rel="stylesheet">
+
+    <style>
+
+        #contribution-table th {
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+
+            -ms-hyphens: auto;
+            -moz-hyphens: auto;
+            -webkit-hyphens: auto;
+            hyphens: auto;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        #contribution-table {
+            font-size: x-small;
+            text-align: center;
+        }
+
+        #table-header td:nth-child({{ player.round_number|add:'1' }}) {
+            background: #350FFF;
+            color: white;
+        }
+
+        #contribution-table tr:nth-child(3) {
+            background: #350FFF77;
+            color: white;
+        }
+
+        #actions-table th, #actions-table td {
+            border: 1px solid black;
+        }
+
+        #actions-table {
+            font-size: x-small;
+            text-align: center;
+        }
+
+        #table-header:nth-child({{ player.round_number|add:'1' }}) {
+            background: #350FFF;
+            color: white;
+        }
+
+    </style>
+
+{% endblock %}
+
+{% block content %}
+
+    <nav class="navbar fixed-top navbar-dark" style="background-color: #3500D3">
+        <a class="navbar-brand" href="#"><img src="{% static "PGG2/pgg_logo.png" %}" height="30px"
+                                              style="padding-right: 10px">Results</a>
+        <ul class="nav navbar-nav navbar-right" style="flex-direction: row">
+            <li class="navbar-text" style="padding-right: 10px">
+                Finished
+            </li>
+        </ul>
+    </nav>
+
+
+    <h4 style="margin-top: 20px">Contributions</h4>
+    <table id="contribution-table"
+           style="width: 100%; table-layout: fixed">
+        <thead>
+        <tr id="table-header">
+            <td>Round:</td>
+            {% for r in Constants.num_rounds_range %}
+                <td colspan="2">{{ r|add:'1' }}</td>
+            {% endfor %}
+        </tr>
+
+        <tr>
+            <td></td>
+            {% for r in Constants.num_rounds_range %}
+                <td>C</td>
+                <td>E</td>
+            {% endfor %}
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr>
+            <td><strong>You</strong></td>
+            {% for p in player.in_all_rounds %}
+                <td>{{ p.contribution }}</td>
+                <td>{{ p.payoff }}</td>
+            {% endfor %}
+        </tr>
+        {% for others in player.get_others_in_group %}
+            <tr>
+                <td>Player {{ others.id_in_group }}</td>
+                {% for p in others.in_all_rounds %}
+                    <td>{{ p.contribution }}</td>
+                    <td>{{ p.payoff }}</td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+
+    <h4 style="margin-top: 40px">Punishments / Rewards</h4>
+    <table id="actions-table" style="width: 100%; table-layout: fixed">
+        <thead>
+        <th>Round:</th>
+        {% for round in Constants.num_rounds_range %}
+            <th id="table-header" colspan="1">{{ round|add:'1' }}</th>
+        {% endfor %}
+        <tr>
+            <th></th>
+            {% for round in Constants.num_rounds_range %}
+                <th>P / R</th>
+            {% endfor %}
+        </tr>
+        </thead>
+
+        <tbody>
+        {% for everyone in group.get_players %}
+            {% if everyone.id_in_group == 1 %}
+                <tr>
+                    <td style="background-color: white; color: #3500D3;"><b>Player 1:</b></td>
+                </tr>
+                <tr>
+                    <td>towards Player 2</td>
+                    {% for p in everyone.in_all_rounds %}
+                        <td>{{ p.punish_or_reward_other_player_2 }}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td>towards Player 3</td>
+                    {% for p in everyone.in_all_rounds %}
+                        <td>{{ p.punish_or_reward_other_player_3 }}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td>towards Player 4</td>
+                    {% for p in everyone.in_all_rounds %}
+                        <td>{{ p.punish_or_reward_other_player_4 }}</td>
+                    {% endfor %}
+                </tr>
+            {% endif %}
+
+            {% if everyone.id_in_group == 2 %}
+                <tr>
+                    <td style="background-color: white; color: #3500D3;"><b>Player 2:</b></td>
+                </tr>
+                <tr>
+                    <td>towards Player 1</td>
+                    {% for p in everyone.in_all_rounds %}
+                        <td>{{ p.punish_or_reward_other_player_1 }}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td>towards Player 3</td>
+                    {% for p in everyone.in_all_rounds %}
+                        <td>{{ p.punish_or_reward_other_player_3 }}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td>towards Player 4</td>
+                    {% for p in everyone.in_all_rounds %}
+                        <td>{{ p.punish_or_reward_other_player_4 }}</td>
+                    {% endfor %}
+                </tr>
+            {% endif %}
+
+            {% if everyone.id_in_group == 3 %}
+                <tr>
+                    <td style="background-color: white; color: #3500D3;"><b>Player 3:</b></td>
+                </tr>
+                <tr>
+                    <td>towards Player 1</td>
+                    {% for p in everyone.in_all_rounds %}
+                        <td>{{ p.punish_or_reward_other_player_1 }}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td>towards Player 2</td>
+                    {% for p in everyone.in_all_rounds %}
+                        <td>{{ p.punish_or_reward_other_player_2 }}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td>towards Player 4</td>
+                    {% for p in everyone.in_all_rounds %}
+                        <td>{{ p.punish_or_reward_other_player_4 }}</td>
+                    {% endfor %}
+                </tr>
+            {% endif %}
+
+            {% if everyone.id_in_group == 4 %}
+                <tr>
+                    <td style="background-color: white; color: #3500D3;"><b>Player 4:</b></td>
+                </tr>
+                <tr>
+                    <td>towards Player 1</td>
+                    {% for p in everyone.in_all_rounds %}
+                        <td>{{ p.punish_or_reward_other_player_1 }}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td>towards Player 2</td>
+                    {% for p in everyone.in_all_rounds %}
+                        <td>{{ p.punish_or_reward_other_player_2 }}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td>towards Player 3</td>
+                    {% for p in everyone.in_all_rounds %}
+                        <td>{{ p.punish_or_reward_other_player_3 }}</td>
+                    {% endfor %}
+                </tr>
+            {% endif %}
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <div style="padding: 30px; text-align: center">
+        Your total payoff is <b>{{ total_payoff }}</b>
+    </div>
+
+{% endblock %}

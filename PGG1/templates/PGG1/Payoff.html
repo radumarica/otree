@@ -1,0 +1,22 @@
+{% extends "global/Page.html" %}
+{% load staticfiles otree %}
+
+{% block title %}
+    Thank you for your participation
+{% endblock %}
+
+{% block content %}
+
+    <div>
+        <p>Your Total Payoff: {{ participant.payoff }}</p>
+
+        {% for o in player.get_others_in_group %}
+            <p>Player {{ o.id_in_group }} Total Payoff: {{ o.participant.payoff }}</p>
+        {% endfor %}
+    </div>
+
+    <div class="buttonPosition">
+      {% next_button %}
+    </div>
+
+{% endblock %}

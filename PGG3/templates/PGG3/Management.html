@@ -1,0 +1,178 @@
+{% extends "global/Page.html" %}
+{% load staticfiles otree %}
+
+{% block app_styles %}
+
+    <link href="{% static "PGG3/styles.css" %}" rel="stylesheet">
+
+{% endblock %}
+
+{% block content %}
+<h3>
+    (<b>Manager</b>) - This is round {{ round_num }}
+</h3>
+
+{% include Constants.overview_template %}
+
+<div class="inputWrapper">
+    <div class="formWrapper">
+        <h5 class="alignCenter">Decision Window</h5>
+        <table class="table">
+            <tbody class="PRTable">
+                <tr>
+                    <th class="roundStyle"></th>
+                    <th>AC</th>
+                    <th>FDA</th>
+                    <th class="formfieldHeader">AP</th>
+                    <th>Pool %</th>
+                    <th></th>
+                </tr>
+
+                <tr>
+                    <th>Your Contribution</th>
+                    <td>{{ player.contribution }}</td>
+                    <td>{{ player.fairlyDistributedAmount }}</td>
+                    <td class="formfieldHeader">
+                        <div class="required">
+                            <div class="controls field-payout_from_manager_{{ player.id_in_group }}">
+                                <div class="input-group input-group-narrow">
+                                    <input type="number" name="payout_from_manager_{{ player.id_in_group }}"  step="0.01" min="0" required id="id_payout_from_manager_{{ player.id_in_group }}" class="form-control" autofocus/>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="poolPerc"></td>
+                    <td rowspan="4"><input type="checkbox" id="equally_distributed" name="equally_distributed" value="True"><br>Equally Distributed Residual</td>
+                </tr>
+
+                {% for o in player.get_others_in_group %}
+                    <tr>
+                        <th>Player {{ o.id_in_group }}</th>
+                        <td>
+                            {% if o.contribution != none %}
+                                {{ o.contribution }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if o.fairlyDistributedAmount != none %}
+                                {{ o.fairlyDistributedAmount }}
+                            {% endif %}
+                        </td>
+                        <td class="formfieldHeader">
+                            <div class="required">
+                                <div class="controls field-payout_from_manager_{{ o.id_in_group }}">
+                                    <div class="input-group input-group-narrow">
+                                        <input type="number" name="payout_from_manager_{{ o.id_in_group }}"  step="0.01" min="0" required id="id_payout_from_manager_{{ o.id_in_group }}" class="form-control"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="poolPerc"></td>
+                    </tr>
+                {% endfor %}
+
+                <tr>
+                    <th>Pool</th>
+                    <td>{{ group.total_contribution }}</td>
+                    <td id="totalPayoff">{{ group.total_payoff }}</td>
+                    <td id="currentPayout" class="formfieldHeader">0</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="informationNotes">
+            <p>AC = Actual contribution</p>
+            <p>FDA = Fairly Distributed Amount</p>
+            <p>AP = Actual Payout</p>
+        </div>
+
+        <button id="nextBtn" type="button" class="otree-btn-next btn btn-primary submitStyle">Next</button>
+        <div class="submitStyle buttonStyle" style="display: none">
+            <button id="backBtn" type="button" class="otree-btn-next btn btn-primary">Back</button>
+            <button id="confirmBtn" class="otree-btn-next btn btn-primary">Confirm</button>
+        </div>
+        <p id="wrntxt" style="text-align: center; display: none">Double check inputs</p>
+    </div> <!--formWrapper-->
+</div> <!--inputWrapper-->
+
+
+{% endblock %}
+
+{% block scripts %}
+
+    <script src="{% static "PGG3/view.js" %}"></script>
+
+    <!--Testing Script-->
+    <script>
+        $('document').ready(function(){
+            $('#nextBtn').click(function () {
+                var pool = Number($( "#totalPayoff" ).text());
+                $('input.form-control').each(function () {
+                    if ($.isNumeric(this.valueAsNumber)) {
+                        pool -= this.valueAsNumber
+                    }
+                });
+
+                if (pool == 0) {
+                    $('#nextBtn').hide();
+                    $('.buttonStyle').show();
+                    $('input').prop('disabled', true);
+                }else{
+                    $('#wrntxt').show();    //.fadeOut( 5000 );
+                };
+            })
+
+            $('#backBtn').click(function () {
+                $('#nextBtn').show();
+                $('.buttonStyle').hide();
+                $('input').prop('disabled', false);
+            })
+
+            $('#confirmBtn').click(function () {
+                $('#nextBtn').show();
+                $('.buttonStyle').hide();
+                $('input').prop('disabled', false);
+            })
+            $('#equally_distributed').click(function () {
+                var distributeResidual = ($('#equally_distributed').prop("checked") === false);
+
+                var managerPayout1 = document.getElementById("id_payout_from_manager_1");
+                var managerPayout2 = document.getElementById("id_payout_from_manager_2");
+                var managerPayout3 = document.getElementById("id_payout_from_manager_3");
+                var managerPayout4 = document.getElementById("id_payout_from_manager_4");
+
+                if(!distributeResidual){
+                    var emptyFieldsNo = 0;
+                    if(!managerPayout1.value) emptyFieldsNo++;
+                    if(!managerPayout2.value) emptyFieldsNo++;
+                    if(!managerPayout3.value) emptyFieldsNo++;
+                    if(!managerPayout4.value) emptyFieldsNo++;
+
+                    {#var dividedResidual = $('#currentPayout').html() / emptyFieldsNo;#}
+                    {#if(!managerPayout1.value) managerPayout1.value = dividedResidual;#}
+                    {#if(!managerPayout2.value) managerPayout2.value = dividedResidual;#}
+                    {#if(!managerPayout3.value) managerPayout3.value = dividedResidual;#}
+                    {#if(!managerPayout4.value) managerPayout4.value = dividedResidual;#}
+
+                    var dividedResidual = $('#currentPayout').html() / 4;
+                    if(!managerPayout1.value) managerPayout1.value = dividedResidual; else managerPayout1.value = parseFloat(managerPayout1.value) + dividedResidual;
+                    if(!managerPayout2.value) managerPayout2.value = dividedResidual; else managerPayout2.value = parseFloat(managerPayout1.value) + dividedResidual;
+                    if(!managerPayout3.value) managerPayout3.value = dividedResidual; else managerPayout3.value = parseFloat(managerPayout2.value) + dividedResidual;
+                    if(!managerPayout4.value) managerPayout4.value = dividedResidual; else managerPayout4.value = parseFloat(managerPayout3.value) + dividedResidual;
+
+                } else {
+                    managerPayout1.value = "";
+                    managerPayout2.value = "";
+                    managerPayout3.value = "";
+                    managerPayout4.value = "";
+
+                }
+                displayValsSub();
+            })
+        });
+    </script>
+
+
+{% endblock %}

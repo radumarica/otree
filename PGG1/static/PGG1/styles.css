@@ -1,0 +1,105 @@
+.container{
+    margin-left: inherit;
+    width: auto;
+    position: relative;
+}
+
+.otree-body{
+    max-width: none;
+}
+
+.informationBody{
+    width: 80%;
+    float: left;
+}
+
+.inputWrapper{
+    display: inline-block;
+    border: 5px outset black;
+    border-radius: 20px;
+    width: 20%;
+    position: relative;
+        top: 30vh;
+    padding: 5px;
+}
+
+.table{
+    margin-bottom: 0px;
+    display: inline-table;
+    width: 100%;
+    table-layout: fixed;
+}
+
+.table th, .table td{
+    border-bottom: 1px solid #dee2e6;
+}
+
+.table > tbody > tr > th, .table > tbody > tr > td{
+    font-size: x-small;
+    padding: 2px;
+    height: 30px;
+    vertical-align: middle;
+}
+
+.table > .PRTable > tr > th, .table > .PRTable > tr > td{
+    float: none;
+    text-align: left;
+}
+
+.table > tbody > tr > th.tableHeader{
+    font-size: 15px;
+    font-weight: bold;
+    border: None;
+    text-align: left;
+    padding-top: 10px;
+}
+
+td{
+    text-align: center;
+    vertical-align: middle;
+}
+
+th{
+    vertical-align: middle;
+}
+
+.tableRegulator{
+    width: auto;
+}
+
+p, .control-label{
+    font-size: x-small;
+}
+
+.roundStyle{
+    font-weight: bold;
+    font-size: small;
+}
+
+.tableWrapper{
+    overflow-x:auto;
+}
+
+.formWrapper, .PRWrapper{
+    padding: 5px;
+    margin-top: 3%;
+}
+
+.page-header{
+    display: none;
+}
+
+.submitStyle{
+    float: left;
+}
+
+.buttonStyle{
+    margin-left: 3%;
+}
+
+.buttonPosition{
+    display: inline-block;
+    position: fixed;
+        bottom: 0;
+    padding: 5px;
+}

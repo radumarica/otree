@@ -1,0 +1,143 @@
+<div class="informationBody">
+    <table class="table">
+        <tr>
+            <th>Round</th>
+            {% for g in Player_for_all_rounds %}
+                <th>{{ g.round_number }}</th>
+            {% endfor %}
+        </tr>
+
+        <!-- Setting up own player contribution row -->
+        <tr>
+            <th>Your Contribution</th>
+            {% for p in player.in_previous_rounds %}
+                <td>{{ p.contribution }}</td>
+            {% endfor %}
+        </tr>
+
+        <!-- Setting up all other players contribution row -->
+        <!-- Takes into account if worker or manager goes first -->
+        {% for o in player.get_others_in_group %}
+            <tr>
+                <th>
+                    Player {{ o.id_in_group }}
+                    {% if o.role == 'Manager' %}
+                    (Manager)
+                    {% endif %}
+                </th>
+                {% if show_all_manager_data == False %}
+                    {% if player.role == 'Manager' %}
+                        {% for p in o.in_all_rounds %}
+                            <td>
+                            {% if p.contribution %}
+                                {{ p.contribution }}
+                            {% endif %}
+                            </td>
+                        {% endfor %}
+                    {% else %}
+                        {% for p in o.in_previous_rounds %}
+                            <td>
+                            {% if p.contribution %}
+                                {{ p.contribution }}
+                            {% endif %}
+                            </td>
+                        {% endfor %}
+                    {% endif %}
+                {% elif show_all_manager_data %}
+                    {% if o.role == 'Manager' %}
+                        {% for p in o.in_all_rounds %}
+                            <td>
+                            {% if p.contribution %}
+                                {{ p.contribution }}
+                            {% endif %}
+                            </td>
+                        {% endfor %}
+                    {% else %}
+                        {% for p in o.in_previous_rounds %}
+                            <td>
+                            {% if p.contribution %}
+                                {{ p.contribution }}
+                            {% endif %}
+                            </td>
+                        {% endfor %}
+                    {% endif %}
+                {% endif %}
+            </tr>
+        {% endfor %}
+
+        <tr>
+            <th>Total Contribution</th>
+            {% for g in group.in_previous_rounds %}
+                    <td>{{ g.total_contribution }}</td>
+            {% endfor %}
+        </tr>
+
+        <tr>
+            <th colspan={{col_num}} class="tableHeader">Earnings history including punishment and reward</th>
+        </tr>
+
+        <tr>
+            <th>Your Earnings</th>
+            {% for p in player.in_previous_rounds %}
+                <td>{{ p.individual_share_after_PR }}</td>
+            {% endfor %}
+        </tr>
+
+        {% for o in player.get_others_in_group %}
+            <tr>
+                <th>
+                    Player {{ o.id_in_group }}
+                    {% if o.role == 'Manager' %}
+                    (Manager)
+                    {% endif %}
+                </th>
+                {% for p in o.in_previous_rounds %}
+                    <td>{{ p.individual_share_after_PR }}</td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+
+        <tr>
+            <th>Group Total Earnings</th>
+            {% for g in group.in_previous_rounds %}
+                    <td>{{ g.total_payoff }}</td>
+            {% endfor %}
+        </tr>
+
+        <tr>
+            <th>Your Total Earnings</th>
+            {% for p in player.in_previous_rounds %}
+                <td>{{ p.total_earnings }}</td>
+            {% endfor %}
+        </tr>
+
+        <tr>
+            <th colspan={{col_num}} class="tableHeader">Manager has Punished/Rewarded</th>
+        </tr>
+
+        <tr>
+            <th>You</th>
+            {% for p in player.in_previous_rounds %}
+                <td>
+                    {{ p.PR_amount }}
+                </td>
+            {% endfor %}
+        </tr>
+
+        {% for p in player.get_others_in_group %}
+            <tr>
+                <th>
+                    Player {{ p.id_in_group }}
+                    {% if p.role == 'Manager' %}
+                    (Manager)
+                    {% endif %}
+                </th>
+                {% for p in p.in_previous_rounds %}
+                    <td>
+                        {{ p.PR_amount }}
+                    </td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+</div> <!--Information Body-->

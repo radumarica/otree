@@ -1,0 +1,155 @@
+<style>
+    #actions-table th, #actions-table td {
+        border: 1px solid black;
+    }
+
+    #actions-table {
+        font-size: x-small;
+        text-align: center;
+    }
+
+    #table-header:nth-child({{ player.round_number|add:'1' }}) {
+        background: #350FFF;
+        color: white;
+    }
+</style>
+
+
+<table id="actions-table" style="width: 100%; table-layout: fixed">
+    <thead>
+    <th>Round:</th>
+    {% for round in Constants.num_rounds_range %}
+        <th id="table-header" colspan="1">{{ round|add:'1' }}</th>
+    {% endfor %}
+    <tr>
+        <th></th>
+        {% for round in Constants.num_rounds_range %}
+            <th>P / R</th>
+        {% endfor %}
+    </tr>
+    </thead>
+
+    <tbody>
+    {% for everyone in group.get_players %}
+        {% if everyone.id_in_group == 1 %}
+            <tr>
+                <td style="background-color: white; color: #3500D3;"><b>Player 1 :</b></td>
+            </tr>
+            <tr>
+                <td>towards Player 1</td>
+                {% for p in everyone.in_previous_rounds %}
+                    <td>{{ p.punish_or_reward_other_player_1 }}</td>
+                {% endfor %}
+            </tr>
+            <tr>
+                <td>towards Player 2</td>
+                {% for p in everyone.in_previous_rounds %}
+                    <td>{{ p.punish_or_reward_other_player_2 }}</td>
+                {% endfor %}
+            </tr>
+            <tr>
+                <td>towards Player 3</td>
+                {% for p in everyone.in_previous_rounds %}
+                    <td>{{ p.punish_or_reward_other_player_3 }}</td>
+                {% endfor %}
+            </tr>
+            <tr>
+                <td>towards Player 4</td>
+                {% for p in everyone.in_previous_rounds %}
+                    <td>{{ p.punish_or_reward_other_player_4 }}</td>
+                {% endfor %}
+            </tr>
+        {% endif %}
+
+        {% if everyone.id_in_group == 2 %}
+            <tr>
+                <td style="background-color: white; color: #3500D3;"><b>Player 2 :</b></td>
+            </tr>
+            <tr>
+                <td>towards Player 1</td>
+                {% for p in everyone.in_previous_rounds %}
+                    <td>{{ p.punish_or_reward_other_player_1 }}</td>
+                {% endfor %}
+            </tr>
+            <tr>
+                <td>towards Player 2</td>
+                {% for p in everyone.in_previous_rounds %}
+                    <td>{{ p.punish_or_reward_other_player_2 }}</td>
+                {% endfor %}
+            </tr>
+            <tr>
+                <td>towards Player 3</td>
+                {% for p in everyone.in_previous_rounds %}
+                    <td>{{ p.punish_or_reward_other_player_3 }}</td>
+                {% endfor %}
+            </tr>
+            <tr>
+                <td>towards Player 4</td>
+                {% for p in everyone.in_previous_rounds %}
+                    <td>{{ p.punish_or_reward_other_player_4 }}</td>
+                {% endfor %}
+            </tr>
+        {% endif %}
+
+        {% if everyone.id_in_group == 3 %}
+            <tr>
+                <td style="background-color: white; color: #3500D3;"><b>Player 3 :</b></td>
+            </tr>
+            <tr>
+                <td>towards Player 1</td>
+                {% for p in everyone.in_previous_rounds %}
+                    <td>{{ p.punish_or_reward_other_player_1 }}</td>
+                {% endfor %}
+            </tr>
+            <tr>
+                <td>towards Player 2</td>
+                {% for p in everyone.in_previous_rounds %}
+                    <td>{{ p.punish_or_reward_other_player_2 }}</td>
+                {% endfor %}
+            </tr>
+            <tr>
+                <td>towards Player 3</td>
+                {% for p in everyone.in_previous_rounds %}
+                    <td>{{ p.punish_or_reward_other_player_3 }}</td>
+                {% endfor %}
+            </tr>
+            <tr>
+                <td>towards Player 4</td>
+                {% for p in everyone.in_previous_rounds %}
+                    <td>{{ p.punish_or_reward_other_player_4 }}</td>
+                {% endfor %}
+            </tr>
+        {% endif %}
+
+        {% if everyone.id_in_group == 4 %}
+            <tr>
+                <td style="background-color: white; color: #3500D3;"><b>Player 4 :</b></td>
+            </tr>
+            <tr>
+                <td>towards Player 1</td>
+                {% for p in everyone.in_previous_rounds %}
+                    <td>{{ p.punish_or_reward_other_player_1 }}</td>
+                {% endfor %}
+            </tr>
+            <tr>
+                <td>towards Player 2</td>
+                {% for p in everyone.in_previous_rounds %}
+                    <td>{{ p.punish_or_reward_other_player_2 }}</td>
+                {% endfor %}
+            </tr>
+            <tr>
+                <td>towards Player 3</td>
+                {% for p in everyone.in_previous_rounds %}
+                    <td>{{ p.punish_or_reward_other_player_3 }}</td>
+                {% endfor %}
+            </tr>
+            <tr>
+                <td>towards Player 4</td>
+                {% for p in everyone.in_previous_rounds %}
+                    <td>{{ p.punish_or_reward_other_player_4 }}</td>
+                {% endfor %}
+            </tr>
+        {% endif %}
+    {% endfor %}
+    </tbody>
+</table>

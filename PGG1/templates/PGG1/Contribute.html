@@ -1,0 +1,115 @@
+{% extends "global/Page.html" %}
+{% load staticfiles otree %}
+
+{% block app_styles %}
+
+    <link href="{% static "PGG1/styles.css" %}" rel="stylesheet">
+
+{% endblock %}
+
+{% block content %}
+
+<div class="informationBody">
+    <h4>
+        {{experiment_name}} (<b>Contribution</b>) - This is round {{ round_num }}
+    </h4>
+    <table class="table tableWrapper">
+        <tr>
+            <th class="roundStyle">Round</th>
+            {% for g in Player_for_all_rounds %}
+                <td class="roundStyle">{{ g.round_number }}</td>
+            {% endfor %}
+        </tr>
+
+        <tr>
+            <th>Your Contribution For Round</th>
+            {% for p in player.in_previous_rounds %}
+                <td>{{ p.contribution }}</td>
+            {% endfor %}
+        </tr>
+
+        {% for o in player.get_others_in_group %}
+            <tr>
+                <th>Player {{ o.id_in_group }}</th>
+                {% for p in o.in_previous_rounds %}
+                    <td>
+                        {% if p.contribution %}
+                            {{ p.contribution }}
+                        {% endif %}
+                    </td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+
+        <tr>
+            <th>Total Contribution</th>
+            {% for g in group.in_previous_rounds %}
+                    <td>{{ g.total_contribution }}</td>
+            {% endfor %}
+        </tr>
+
+{#        <tr>#}
+{#            <th colspan={{col_num}} class="tableHeader">Earnings history including punishment and reward</th>#}
+{#        </tr>#}
+{##}
+{#        <tr>#}
+{#            <th>Your Earnings For Round</th>#}
+{#            {% for p in player.in_previous_rounds %}#}
+{#                <td>{{ p.individual_share_after_PR }}</td>#}
+{#            {% endfor %}#}
+{#        </tr>#}
+{##}
+{#        {% for o in player.get_others_in_group %}#}
+{#            <tr>#}
+{#                <th>Player {{ o.id_in_group }}</th>#}
+{#                {% for p in o.in_previous_rounds %}#}
+{#                    <td>#}
+{#                        {{ p.individual_share_after_PR }}#}
+{#                    </td>#}
+{#                {% endfor %}#}
+{#            </tr>#}
+{#        {% endfor %}#}
+{##}
+{#        <tr>#}
+{#            <th>Group Total Earnings</th>#}
+{#            {% for g in group.in_previous_rounds %}#}
+{#                    <td>{{ g.total_payoff }}</td>#}
+{#            {% endfor %}#}
+{#        </tr>#}
+{##}
+{#        <tr>#}
+{#            <th>Your Total Earnings For Round</th>#}
+{#            {% for p in player.in_previous_rounds %}#}
+{#                <td>{{ p.payoff }}</td>#}
+{#            {% endfor %}#}
+{#        </tr>#}
+    </table>
+</div> <!--Information Body-->
+
+<div class="inputWrapper">
+    <div class="formWrapper">
+        <p>
+            This is a public goods game with
+            {{ Constants.players_per_group }} players per group.
+
+        </p>
+        <p>In this round you have an endowment of {{ Constants.endowment }}</p>
+        <div style="overflow: auto">
+            <div class="form-group required">
+                <label class="control-label" for="id_contribution">How much will you contribute (from 0 to 100)?</label>
+
+                <div class="controls  field-contribution">
+                    <div class="input-group input-group-narrow submitStyle">
+                        <input type="number" name="contribution" required step="1" min="0" max="100" id="id_contribution" class="form-control">
+                        <span class="input-group-addon"></span>
+                    </div>
+                    <div class="submitStyle buttonStyle">
+                        {% next_button %}
+                    </div>
+                </div><!--- .controls -->
+            </div><!--- .form-group -->
+        </div>
+    </div> <!--PRWrapper-->
+</div> <!--inputWrapper-->
+
+{% endblock %}

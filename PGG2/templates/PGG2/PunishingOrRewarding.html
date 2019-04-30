@@ -1,0 +1,178 @@
+{% extends "global/Page.html" %}
+{% load staticfiles otree %}
+
+
+{% block app_styles %}
+
+    <link href="{% static "PGG2/styles.css" %}" rel="stylesheet">
+
+    <style>
+
+        #game-info-tables{
+            position: fixed;
+            top: 130px;
+        }
+
+        .otree-btn-next {
+            margin: 0px;
+        }
+
+        .form-control {
+            border-color: white;
+        }
+
+        .form-control:focus {
+            border-color: #3500D3;
+        }
+
+        #punish-or-reward-div {
+            margin-left: -50px;
+            margin-right: -50px;
+            padding-right: 50px;
+            overflow: hidden;
+            background-color: #350FFF;
+            position: fixed;
+        }
+
+        #punish-or-reward-table th {
+            border-right: dashed 2px;
+            text-align: center;
+        }
+
+        #punish-or-reward-table th:last-child {
+            border-right: none;
+        }
+
+        #punish-or-reward-table td:nth-child(3n+0) {
+            border-right: dashed 2px;
+        }
+
+        #punish-or-reward-table td:last-child {
+            border-right: none;
+        }
+
+        #contribution-table th {
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+
+            -ms-hyphens: auto;
+            -moz-hyphens: auto;
+            -webkit-hyphens: auto;
+            hyphens: auto;
+        }
+
+        #contribution-table {
+            font-size: x-small;
+            text-align: center;
+        }
+
+        #contribution-table th, #contribution-table td {
+            border: 1px solid black;
+        }
+
+        #table-header td:nth-child({{ player.round_number|add:'1' }}) {
+            background: #350FFF;
+            color: white;
+        }
+
+    </style>
+
+{% endblock %}
+
+
+{% block content %}
+
+    <nav id="navbar-main" class="navbar fixed-top navbar-dark" style="background-color: #3500D3">
+        <a class="navbar-brand" href="#"><img src="{% static "PGG2/pgg_logo.png" %}" height="30px"
+                                              style="padding-right: 10px">Punish or Reward</a>
+        <ul class="nav navbar-nav navbar-right" style="flex-direction: row">
+            <li class="navbar-text" style="padding-right: 10px">
+                <img src="{% static "PGG2/submit_here.png" %}" height="20">
+            </li>
+            <li>{{ form.contribution }}</li>
+            <li>
+                <button class="btn btn-primary otree-btn-next btn-outline-light" type="submit">Submit</button>
+            </li>
+        </ul>
+    </nav>
+
+    <div id="punish-or-reward-div">
+        <table id="punish-or-reward-table"
+               style="width: 100%; table-layout: fixed; font-family: Sans-Serif; color: white">
+            <tr>
+                {% for field in form %}
+                    <th colspan="3">{{ field.label }}</th>
+                    {% if forloop.counter == player.id_in_group %}
+                        (You)
+                    {% endif %}
+                {% endfor %}
+            </tr>
+            <tr>
+                {% for field in form %}
+                    {% for choice in field %}
+                        <td style="text-align: center">{{ choice }}</td>
+                    {% endfor %}
+                {% endfor %}
+            </tr>
+        </table>
+    </div>
+
+    <div id="game-info-tables">
+        <h4>Contributions</h4>
+        <table id="contribution-table" style="table-layout: fixed; width: 100%">
+            <tr id="table-header">
+                <td>Round:</td>
+                {% for r in Constants.num_rounds_range %}
+                    <td colspan="2">{{ r|add:'1' }}</td>
+                {% endfor %}
+            </tr>
+
+            <tr>
+                <td></td>
+                {% for r in Constants.num_rounds_range %}
+                    <td>C</td>
+                    <td>E</td>
+                {% endfor %}
+            </tr>
+
+            <tbody>
+            <tr>
+                <td><strong>You (Player {{ player.id_in_group }})</strong></td>
+                {% for p in player.in_previous_rounds %}
+                    <td>{{ p.contribution }}</td>
+                    <td>{{ p.payoff }}</td>
+                {% endfor %}
+                <td>{{ player.contribution }}</td>
+            </tr>
+            {% for others in player.get_others_in_group %}
+                <tr>
+                    <td>Player {{ others.id_in_group }}</td>
+                    {% for p in others.in_previous_rounds %}
+                        <td>{{ p.contribution }}</td>
+                        <td>{{ p.payoff }}</td>
+                    {% endfor %}
+                    <td>{{ others.contribution }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <h4 style="margin-top: 10px">Punishments / Rewards</h4>
+        {% include "PGG2/ActionsTable.html" %}
+    </div>
+
+{% endblock %}
+
+
+{% block scripts %}
+
+    <script>
+
+        $(document).ready(function () {
+            document.getElementById("punish-or-reward-div").style.top =
+            document.getElementById("navbar-main").offsetHeight + "px"
+        })
+
+    </script>
+
+{% endblock %}

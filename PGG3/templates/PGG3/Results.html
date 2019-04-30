@@ -1,0 +1,93 @@
+{% extends "global/Page.html" %}
+{% load staticfiles otree %}
+
+{% block app_styles %}
+
+    <link href="{% static "PGG3/styles.css" %}" rel="stylesheet">
+
+{% endblock %}
+
+{% block content %}
+
+    <h3>
+        <b>Results</b>
+    </h3>
+
+    <table class="table tableWrapper">
+        <tr>
+            <th></th>
+            {% for g in group.in_all_rounds %}
+                <th colspan="3" scope="colgroup">Round {{ g.round_number }}</th>
+            {% endfor %}
+        </tr>
+
+        <tr>
+            <th></th>
+            {% for g in group.in_all_rounds %}
+                <td scope="col">Contr.</td>
+                <td scope="col">Est.</br>Ern.</td>
+                <td scope="col">Real</br>Ern.</td>
+            {% endfor %}
+        </tr>
+
+        <tr>
+            <th>Your Contribution</th>
+            {% for p in player.in_all_rounds %}
+                <td>{{ p.contribution }}</td>
+                <td>{{ p.fairlyDistributedAmount }}</td>
+                <td class= "{% if p.earnings > p.fairlyDistributedAmount %}
+                            payoutMore
+                        {% elif p.earnings < p.fairlyDistributedAmount %}
+                            payoutLess
+                        {% endif %}">
+                    {{ p.earnings }}
+                </td>
+            {% endfor %}
+        </tr>
+
+        {% for o in player.get_others_in_group %}
+            <tr>
+                <th>Player {{ o.id_in_group }}</th>
+                {% for p in o.in_all_rounds %}
+                    <td>
+                        {% if p.contribution != none %}
+                            {{ p.contribution }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if p.fairlyDistributedAmount != none %}
+                            {{ p.fairlyDistributedAmount }}
+                        {% endif %}
+                    </td>
+                    <td class= "{% if p.earnings > p.fairlyDistributedAmount %}
+                                payoutMore
+                            {% elif p.earnings < p.fairlyDistributedAmount %}
+                                payoutLess
+                            {% endif %}">
+                        {% if p.earnings != none %}
+                            {{ p.earnings }}
+                        {% endif %}
+                    </td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+
+        <tr>
+            <th>Total Contribution</th>
+            {% for g in group.in_all_rounds %}
+                <td colspan="3">{{ g.total_contribution }}</td>
+            {% endfor %}
+        </tr>
+    </table>
+
+    <div>
+        <p>Your average payoff is {{ average_payoff }}</p>
+        <p>The experiment is over now. Please raise your hand and wait for the instructor to come to you!</p>
+    </div>
+
+    <div class="buttonPosition">
+      {% next_button %}
+    </div>
+{% endblock %}
+
+

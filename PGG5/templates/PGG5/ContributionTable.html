@@ -1,0 +1,74 @@
+<style>
+
+    #contribution-table th, #contribution-table td {
+        border: 1px solid black;
+    }
+
+    #contribution-table {
+        font-size: small;
+        text-align: center;
+    }
+
+    #table-header td:nth-child({{ player.round_number|add:'1' }}) {
+        background: #350FFF;
+        color: white;
+    }
+
+    #contribution-table tr:nth-child({{ player.id_in_group|add:'2' }}) {
+        background: #350FFF77;
+        color: white;
+    }
+
+</style>
+
+
+<table id="contribution-table" style="table-layout: fixed; width: 100%">
+    <tr id="table-header">
+        <td>Round:</td>
+        {% for r in Constants.num_rounds_range %}
+            <td colspan="2">{{ r|add:'1' }}</td>
+        {% endfor %}
+    </tr>
+
+    <tr>
+        <td></td>
+        {% for r in Constants.num_rounds_range %}
+            <td>C</td>
+            <td>E</td>
+        {% endfor %}
+    </tr>
+
+    {% for p in group.get_players %}
+        <tr>
+            <th>
+                Player
+                {{ p.id_in_group }}
+                {% if p.id_in_group == player.id_in_group %} (You) {% endif %}
+            </th>
+            {% for r in p.in_all_rounds_previous_range %}
+                {% if r != None and r.contribution != None %}
+                    <td>{{ r.contribution }}</td>
+                    <td>{{ r.payoff }}</td>
+                {% else %}
+                    <td></td>
+                    <td></td>
+                {% endif %}
+            {% endfor %}
+        </tr>
+    {% endfor %}
+
+    <tr>
+        <th>
+            Sum
+        </th>
+        {% for r in player.in_all_rounds_full_range %}
+            {% if r.group.total_contribution != None %}
+                <td>{{ r.group.total_contribution }}</td>
+                <td></td>
+            {% else %}
+                <td></td>
+                <td></td>
+            {% endif %}
+        {% endfor %}
+    </tr>
+</table>
